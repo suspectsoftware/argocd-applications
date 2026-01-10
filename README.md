@@ -1,0 +1,1 @@
+# argocd-solution-alpha
