@@ -23,6 +23,8 @@ spec:
         app.kubernetes.io/name: household-planner
         app.kubernetes.io/instance: planner
     spec:
+      imagePullSecrets:
+        - name: harbor-pull
       restartPolicy: Never
       securityContext:
         fsGroup: 1001
@@ -61,4 +63,3 @@ spec:
             requests:
               cpu: 50m
               memory: 128Mi
-

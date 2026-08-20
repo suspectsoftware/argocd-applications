@@ -25,6 +25,8 @@ spec:
         # Roll the pods when the allowlist changes.
         checksum/config: e03844890b372e7fc4920a6c76a93bad57fe6a205427df8f5e1059d32f23d24d
     spec:
+      imagePullSecrets:
+        - name: harbor-pull
       securityContext:
         fsGroup: 1001
         runAsNonRoot: true
@@ -114,4 +116,3 @@ spec:
           emptyDir: {}
         - name: tmp
           emptyDir: {}
-
