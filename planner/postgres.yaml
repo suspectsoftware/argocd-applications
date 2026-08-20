@@ -1,0 +1,110 @@
+---
+# Source: household-planner/templates/postgres.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: planner-postgres
+  labels:
+    app.kubernetes.io/name: household-planner
+    app.kubernetes.io/instance: planner
+    app.kubernetes.io/version: "0.2.0"
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: household-planner-0.2.0
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: household-planner
+    app.kubernetes.io/instance: planner
+    app.kubernetes.io/component: postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
+
+---
+# Source: household-planner/templates/postgres.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: planner-postgres
+  labels:
+    app.kubernetes.io/name: household-planner
+    app.kubernetes.io/instance: planner
+    app.kubernetes.io/version: "0.2.0"
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: household-planner-0.2.0
+spec:
+  serviceName: planner-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: household-planner
+      app.kubernetes.io/instance: planner
+      app.kubernetes.io/component: postgres
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: household-planner
+        app.kubernetes.io/instance: planner
+        app.kubernetes.io/component: postgres
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 70
+        fsGroup: 70
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: postgres
+          image: postgres:17-alpine
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "household_planner"
+            - name: POSTGRES_USER
+              value: "planner"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: planner-secrets
+                  key: postgres-password
+            # The mount root is owned by root; keep the cluster in a subdir.
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command:
+                ["pg_isready", "-U", "planner", "-d", "household_planner"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                ["pg_isready", "-U", "planner", "-d", "household_planner"]
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi
+

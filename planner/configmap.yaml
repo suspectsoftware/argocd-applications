@@ -1,0 +1,16 @@
+---
+# Source: household-planner/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: planner-config
+  labels:
+    app.kubernetes.io/name: household-planner
+    app.kubernetes.io/instance: planner
+    app.kubernetes.io/version: "0.2.0"
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: household-planner-0.2.0
+data:
+  ALLOWED_EMAILS: "rasmus@cotv.dk,rasmus@callofthevoid.dk,rasmus@suspectsoftware.com,magdacs.bianca@gmail.com"
+  ALLOWED_DOMAINS: ""
+
