@@ -11,6 +11,5 @@ metadata:
     app.kubernetes.io/managed-by: Helm
     helm.sh/chart: household-planner-0.2.1
 data:
-  ALLOWED_EMAILS: "rasmus@cotv.dk,rasmus@callofthevoid.dk,rasmus@suspectsoftware.com,magdacs.bianca@gmail.com"
+  ALLOWED_EMAILS: "rasmus@cotv.dk,rasmus@callofthevoid.dk,rasmus@suspectsoftware.com,rasmusbojorgensen@gmail.com,magdacs.bianca@gmail.com"
   ALLOWED_DOMAINS: ""
-
