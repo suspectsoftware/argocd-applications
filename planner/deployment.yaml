@@ -7,9 +7,9 @@ metadata:
   labels:
     app.kubernetes.io/name: household-planner
     app.kubernetes.io/instance: planner
-    app.kubernetes.io/version: "0.2.0"
+    app.kubernetes.io/version: "0.2.1"
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: household-planner-0.2.0
+    helm.sh/chart: household-planner-0.2.1
 spec:
   replicas: 1
   selector:
@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/instance: planner
       annotations:
         # Roll the pods when the allowlist changes.
-        checksum/config: 931fbabfad1612b8cd7001798b5f34fd09adf5d1076b7e10b2982a1873e64f83
+        checksum/config: e03844890b372e7fc4920a6c76a93bad57fe6a205427df8f5e1059d32f23d24d
     spec:
       securityContext:
         fsGroup: 1001
@@ -33,7 +33,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: app
-          image: "harbor.suspectsoftware.com/homelab/planner:0.2.0"
+          image: "harbor.suspectsoftware.com/homelab/planner:0.2.1"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false

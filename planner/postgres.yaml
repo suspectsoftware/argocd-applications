@@ -7,9 +7,9 @@ metadata:
   labels:
     app.kubernetes.io/name: household-planner
     app.kubernetes.io/instance: planner
-    app.kubernetes.io/version: "0.2.0"
+    app.kubernetes.io/version: "0.2.1"
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: household-planner-0.2.0
+    helm.sh/chart: household-planner-0.2.1
 spec:
   clusterIP: None
   selector:
@@ -30,9 +30,9 @@ metadata:
   labels:
     app.kubernetes.io/name: household-planner
     app.kubernetes.io/instance: planner
-    app.kubernetes.io/version: "0.2.0"
+    app.kubernetes.io/version: "0.2.1"
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: household-planner-0.2.0
+    helm.sh/chart: household-planner-0.2.1
 spec:
   serviceName: planner-postgres
   replicas: 1
@@ -56,7 +56,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: postgres
-          image: postgres:17-alpine
+          image: postgres:18-alpine
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
