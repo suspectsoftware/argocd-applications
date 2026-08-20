@@ -5,6 +5,7 @@ metadata:
 spec:
   selector:
     app: example-web
+    test: test
   ports:
     - name: http
       port: 80
