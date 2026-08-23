@@ -7,9 +7,9 @@ metadata:
   labels:
     app.kubernetes.io/name: household-planner
     app.kubernetes.io/instance: planner
-    app.kubernetes.io/version: "0.3.1"
+    app.kubernetes.io/version: "0.3.2"
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: household-planner-0.3.1
+    helm.sh/chart: household-planner-0.3.2
 spec:
   replicas: 1
   selector:
@@ -23,7 +23,7 @@ spec:
         app.kubernetes.io/instance: planner
       annotations:
         # Roll the pods when the allowlist changes.
-        checksum/config: 68be35231bdb01159fc433c8e50458170deeaf26a0bb452f31cdb8c348029850
+        checksum/config: db7da8a37563be4bffbc5a1b5d569922d2757f14ebe4b45b545bf00f9a0009bd
     spec:
       imagePullSecrets:
         - name: harbor-pull
@@ -35,7 +35,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: app
-          image: "harbor.suspectsoftware.com/homelab/planner:0.3.1"
+          image: "harbor.suspectsoftware.com/homelab/planner:0.3.2"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
