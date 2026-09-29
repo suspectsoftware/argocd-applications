@@ -21,7 +21,7 @@ spec:
         - name: harbor-pull
       containers:
         - name: migrate
-          image: "harbor.suspectsoftware.com/homelab/web:0.6.0"
+          image: "harbor.suspectsoftware.com/homelab/web:0.6.1"
           command: ["node", "scripts/migrate.mjs"]
           env:
             - name: PGHOST
