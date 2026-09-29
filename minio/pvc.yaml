@@ -10,6 +10,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: local-path
+  volumeName: pvc-97bc58a1-8269-4627-8fe5-fea501bebdaa
   resources:
     requests:
       storage: 500Gi

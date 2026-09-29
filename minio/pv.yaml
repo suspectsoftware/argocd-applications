@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pvc-97bc58a1-8269-4627-8fe5-fea501bebdaa
+  labels:
+    app.kubernetes.io/name: minio
+    app.kubernetes.io/instance: minio
+spec:
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  volumeMode: Filesystem
+  local:
+    path: /var/lib/rancher/k3s/storage/pvc-97bc58a1-8269-4627-8fe5-fea501bebdaa_app-minio_minio-data
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - nuc-desktop
