@@ -1,0 +1,15 @@
+---
+# Source: web/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+  labels:
+    app.kubernetes.io/name: web
+    app.kubernetes.io/instance: web
+    app.kubernetes.io/managed-by: Helm
+data:
+  ALLOWED_EMAILS: "rasmus@cotv.dk,rasmus@callofthevoid.dk,rasmusbojorgensen@gmail.com,rasmus@suspectsoftware.com"
+  ALLOWED_DOMAINS: ""
+  IMAGE_STORAGE_PATH: /app/data/images
+

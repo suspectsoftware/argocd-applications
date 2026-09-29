@@ -32,7 +32,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: web
-          image: "harbor.suspectsoftware.com/homelab/web:0.5.1"
+          image: "harbor.suspectsoftware.com/homelab/web:0.6.0"
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
@@ -43,6 +43,42 @@ spec:
           ports:
             - name: http
               containerPort: 3000
+          env:
+            - name: PGHOST
+              value: web-postgres
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: "cotv"
+            - name: PGUSER
+              value: "cotv"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: postgres-password
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: auth-secret
+            - name: AUTH_GOOGLE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: google-client-id
+            - name: AUTH_GOOGLE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: google-client-secret
+            - name: AUTH_URL
+              value: "https://cotv.dk"
+            - name: AUTH_TRUST_HOST
+              value: "true"
+          envFrom:
+            - configMapRef:
+                name: web-config
           readinessProbe:
             httpGet:
               path: /
@@ -60,7 +96,12 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            - name: images
+              mountPath: /app/data
       volumes:
         - name: tmp
           emptyDir: {}
+        - name: images
+          persistentVolumeClaim:
+            claimName: web-images
 
