@@ -23,6 +23,31 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       terminationGracePeriodSeconds: 60
+      initContainers:
+        - name: seed-proxy-config
+          image: busybox:1.36.1
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              if [ ! -f /config/configuration.yaml ]; then
+                printf 'default_config:\n' > /config/configuration.yaml
+              fi
+              if ! grep -q '^http:' /config/configuration.yaml; then
+                cat /seed/proxy.yaml >> /config/configuration.yaml
+              fi
+          securityContext:
+            runAsUser: 0
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: proxy-config
+              mountPath: /seed
+              readOnly: true
       containers:
         - name: homeassistant
           image: ghcr.io/home-assistant/home-assistant:stable
@@ -64,6 +89,9 @@ spec:
         - name: config
           persistentVolumeClaim:
             claimName: homeassistant-config
+        - name: proxy-config
+          configMap:
+            name: homeassistant-proxy-config
         - name: dbus
           hostPath:
             path: /run/dbus
