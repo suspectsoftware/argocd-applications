@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homeassistant
+  labels:
+    app.kubernetes.io/name: homeassistant
+    app.kubernetes.io/instance: homeassistant
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: homeassistant
+      app.kubernetes.io/instance: homeassistant
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: homeassistant
+        app.kubernetes.io/instance: homeassistant
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: homeassistant
+          image: ghcr.io/home-assistant/home-assistant:stable
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          env:
+            - name: TZ
+              value: Europe/Copenhagen
+          ports:
+            - name: http
+              containerPort: 8123
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 2Gi
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: dbus
+              mountPath: /run/dbus
+              readOnly: true
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: homeassistant-config
+        - name: dbus
+          hostPath:
+            path: /run/dbus
+            type: DirectoryOrCreate

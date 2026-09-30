@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: homeassistant
+  labels:
+    app.kubernetes.io/name: homeassistant
+    app.kubernetes.io/instance: homeassistant
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: homeassistant
+    app.kubernetes.io/instance: homeassistant
+  ports:
+    - name: http
+      port: 8123
+      targetPort: http
